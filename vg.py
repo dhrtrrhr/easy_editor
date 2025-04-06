@@ -46,15 +46,21 @@ img_lbl = QLabel()
 v1_line.addWidget(img_lbl)
 
 btn_layout = QHBoxLayout()
-
+btn_layout2 = QHBoxLayout()
+btn_layout3 = QHBoxLayout()
 
 left_btn = QPushButton("Вліво")
 right_btn = QPushButton("Вправо")
 mirror_btn = QPushButton("Дзеркало")
 sharp_btn = QPushButton("Різкість")
 bw_btn = QPushButton("Ч/Б")
-
-
+enhence_btn = QPushButton("насиченість +")
+EDGE_ENHANCE_btn = QPushButton("покращення ребер")
+CONTOUR_btn = QPushButton("накладання контурів")
+BLUR_btn = QPushButton("розмивання")
+Brightness_btn = QPushButton("яскравість +")
+DETAIL_btn =QPushButton("детелізація +")
+SMOOTH_btn = QPushButton("згладжування")
 
 
 btn_layout.addWidget(left_btn)
@@ -62,9 +68,19 @@ btn_layout.addWidget(right_btn)
 btn_layout.addWidget(mirror_btn)
 btn_layout.addWidget(sharp_btn)
 btn_layout.addWidget(bw_btn)
+btn_layout2.addWidget(enhence_btn)
+btn_layout2.addWidget(EDGE_ENHANCE_btn)
+btn_layout2.addWidget(CONTOUR_btn)
+btn_layout2.addWidget(BLUR_btn)
+btn_layout3.addWidget(Brightness_btn)
+btn_layout2.addWidget(SMOOTH_btn)
+btn_layout3.addWidget(DETAIL_btn)
 
 
 v1_line.addLayout(btn_layout)
+v1_line.addLayout(btn_layout2)
+v1_line.addLayout(btn_layout3)
+
 
 
 main_line.addLayout(left_line)
@@ -98,7 +114,33 @@ class ImageProcessor:
         self.image = self.image.filter(ImageFilter.SHARPEN)
         self.show()
     def Black_WHITE(self):
-        self.image = self.image
+        self.image = self.image.convert("L")
+        self.show()
+    def enhence(self):
+        self.image = ImageEnhance.Color(self.image).enhance(1.5)
+        self.show()
+    def edge_enhance(self):
+        self.image = self.image.filter(ImageFilter.EDGE_ENHANCE)
+        self.show()
+    def CONTOUR(self):
+        self.image = self.image.filter(ImageFilter.CONTOUR)
+        self.show()
+    def BLUR(self):
+        self.image = self.image.filter(ImageFilter.BLUR)
+        self.show()
+    def Brightness(self):
+        self.image =  ImageEnhance.Brightness(self.image).enhance(1.5)
+        self.show()
+    def DETAIL(self):
+        self.image = self.image.filter(ImageFilter.DETAIL  )
+        self.show()
+    def SMOOTH(self):
+        self.image = self.image.filter(ImageFilter.SMOOTH   )
+        self.show()
+
+
+
+
 ip = ImageProcessor()
 ip.filename = "img.png"
 ip.load()
@@ -114,7 +156,7 @@ def open_folders():
 folders_btn.clicked.connect(open_folders)
 
 def show_img():
-    ip.filename = img_lbl.currentItem().text()
+    ip.filename = file_list.currentItem().text()
     ip.load()
     ip.show()
 file_list.currentRowChanged.connect(show_img)
@@ -125,6 +167,14 @@ left_btn.clicked.connect(ip.rotate_left)
 right_btn.clicked.connect(ip.rotate_right)
 mirror_btn.clicked.connect(ip.flip_Left_Right)
 sharp_btn.clicked.connect(ip.sharpen)
+bw_btn.clicked.connect(ip.Black_WHITE)
+enhence_btn.clicked.connect(ip.enhence)
+EDGE_ENHANCE_btn.clicked.connect(ip.edge_enhance)
+CONTOUR_btn.clicked.connect(ip.CONTOUR)
+BLUR_btn.clicked.connect(ip.BLUR)
+Brightness_btn.clicked.connect(ip.Brightness)
+DETAIL_btn.clicked.connect(ip.DETAIL)
+SMOOTH_btn.clicked.connect(ip.SMOOTH)
 
 
 window.setLayout(main_line)
